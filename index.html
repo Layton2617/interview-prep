@@ -26,7 +26,6 @@ header .wrap { display: flex; align-items: center; justify-content: space-betwee
 h1 { font-size: 19px; margin: 0; letter-spacing: 0.01em; }
 .link { background: none; border: 0; padding: 0; color: var(--accent); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
 .intro { color: var(--muted); margin: 6px 0 22px; font-size: 15px; }
-.resume { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--soft); border: 1px solid var(--accent); border-radius: 12px; padding: 12px 16px; margin-bottom: 18px; font-size: 14.5px; }
 .step { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 14px; }
 .step h2 { font-size: 16px; margin: 0 0 4px; display: flex; align-items: center; gap: 10px; }
 .step h2 i { font-style: normal; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 13px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
@@ -35,15 +34,6 @@ h1 { font-size: 19px; margin: 0; letter-spacing: 0.01em; }
 textarea, input[type=text], input[type=password], select { width: 100%; background: var(--field); border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; font-size: 15px; }
 textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
 textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-.drop { border: 1.5px dashed var(--line); border-radius: 11px; padding: 22px 16px; text-align: center; background: var(--field); cursor: pointer; transition: border-color .15s, background .15s; }
-.drop:hover, .drop.over { border-color: var(--accent); background: var(--soft); }
-.drop b { display: block; font-size: 15px; }
-.drop small { color: var(--muted); font-size: 13px; }
-.got { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--soft); border-radius: 9px; padding: 10px 14px; font-size: 14.5px; }
-.got span::before { content: "✓ "; color: var(--accent); font-weight: 700; }
-.got div { display: flex; gap: 14px; flex: 0 0 auto; }
-.paste { margin-top: 10px; text-align: right; }
-.doc textarea { margin-top: 10px; }
 .go { margin: 18px 0 8px; }
 .btn { border: 1.5px solid var(--accent); background: transparent; color: var(--accent); border-radius: 11px; padding: 10px 18px; font-weight: 600; font-size: 15px; }
 .btn.primary { background: var(--accent); color: var(--accent-ink); }
@@ -74,6 +64,32 @@ textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px s
 .dots span:nth-child(3) { animation-delay: .4s; }
 @keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
 .composer { position: sticky; bottom: 0; background: var(--bg); padding: 10px 0 18px; border-top: 1px solid var(--line); }
+
+aside { position: fixed; inset: 0 auto 0 0; width: 264px; background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 18px 12px 12px; z-index: 5; transition: transform .2s; }
+aside h1 { padding: 0 8px 14px; }
+aside .btn { width: 100%; }
+#chats { flex: 1; overflow-y: auto; margin-top: 14px; }
+.chat { display: flex; align-items: center; border-radius: 9px; padding: 0 4px 0 10px; cursor: pointer; }
+.chat:hover, .chat.on { background: var(--soft); }
+.chat span { flex: 1; padding: 9px 0; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chat.busy span::after { content: " …"; color: var(--accent); }
+.chat button { background: none; border: 0; color: var(--muted); font-size: 17px; padding: 4px 8px; visibility: hidden; }
+.chat:hover button { visibility: visible; }
+aside small { color: var(--muted); font-size: 12px; padding: 10px 8px 0; line-height: 1.5; }
+main { margin-left: 264px; }
+#menu { display: none; background: none; border: 0; font-size: 22px; padding: 0 12px 0 0; }
+#shade { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, .4); z-index: 4; }
+header { display: none; }
+@media (max-width: 860px) {
+  aside { transform: translateX(-100%); }
+  body.open aside { transform: none; }
+  body.open #shade { display: block; }
+  main { margin-left: 0; }
+  header { display: block; }
+  header .wrap { justify-content: flex-start; }
+  #menu { display: block; }
+  .chat button { visibility: visible; }
+}
 .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
 .chips::-webkit-scrollbar { display: none; }
 .chips button { flex: 0 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 13.5px; white-space: nowrap; }
@@ -83,40 +99,45 @@ textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px s
 .composer .box { display: flex; gap: 10px; align-items: flex-end; }
 .composer textarea { min-height: 52px; max-height: 40vh; resize: none; }
 .composer small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
-
+#setup { padding-top: 22px; }
+.step h2 .up { margin-left: auto; font-weight: 400; }
+.doc.over textarea { border-color: var(--accent); background: var(--soft); }
+.note { font-size: 13px; color: var(--muted); margin-top: 6px; }
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>Interview Prep</h1></div></header>
+<aside>
+  <h1>Interview Prep</h1>
+  <button class="btn primary" id="new">＋ 新对话</button>
+  <div id="chats"></div>
+  <small>对话保存在这个浏览器里。内容也会被服务方记录，用于改进服务。</small>
+</aside>
+<div id="shade"></div>
+
+<main>
+<header><div class="wrap"><button id="menu" aria-label="对话列表">☰</button><h1>Interview Prep</h1></div></header>
 
 <div class="wrap" id="setup">
   <p class="intro">北美面试准备：贴上岗位，传上简历，说你想做什么。 <button class="link" id="sample">用示例试试</button></p>
 
-  <div class="resume" id="resumeBar" hidden>
-    <span>上次的对话还没结束。</span>
-    <button class="btn" id="resumeBtn">继续</button>
-  </div>
-
-  <div class="step">
-    <h2><i>1</i>岗位描述</h2>
-    <textarea id="jd" rows="6" placeholder="粘贴 JD 全文"></textarea>
+  <div class="step doc" data-doc="jd">
+    <h2><i>1</i>岗位描述<button class="link up">上传文件</button></h2>
+    <textarea id="jd" rows="6" placeholder="粘贴文本，或把 PDF / Word 文件拖到这里"></textarea>
+    <div class="note" hidden></div>
+    <input type="file" accept=".pdf,.docx,.md,.markdown,.txt" hidden>
   </div>
 
   <div class="step doc" data-doc="cv">
-    <h2><i>2</i>简历</h2>
-    <div class="drop"><b>点击选择文件，或拖到这里</b><small>PDF、Word、Markdown、TXT</small></div>
-    <div class="got" hidden><span></span><div><button class="link" data-act="edit">查看 / 修改</button><button class="link" data-act="clear">移除</button></div></div>
-    <div class="paste"><button class="link" data-act="edit">或直接粘贴</button></div>
-    <textarea id="cv" rows="8" hidden placeholder="粘贴简历文本"></textarea>
+    <h2><i>2</i>简历<button class="link up">上传文件</button></h2>
+    <textarea id="cv" rows="7" placeholder="粘贴文本，或把 PDF / Word 文件拖到这里"></textarea>
+    <div class="note" hidden></div>
     <input type="file" accept=".pdf,.docx,.md,.markdown,.txt" hidden>
   </div>
 
   <div class="step doc" data-doc="refs">
-    <h2><i>3</i>参考资料 <em>可选</em></h2>
-    <div class="drop"><b>点击选择文件，或拖到这里</b><small>可多选</small></div>
-    <div class="got" hidden><span></span><div><button class="link" data-act="edit">查看 / 修改</button><button class="link" data-act="clear">移除</button></div></div>
-    <div class="paste"><button class="link" data-act="edit">或直接粘贴</button></div>
-    <textarea id="refs" rows="6" hidden placeholder="粘贴参考资料"></textarea>
+    <h2><i>3</i>参考资料 <em>可选</em><button class="link up">上传文件</button></h2>
+    <textarea id="refs" rows="4" placeholder="粘贴文本，或把 PDF / Word 文件拖到这里"></textarea>
+    <div class="note" hidden></div>
     <input type="file" accept=".pdf,.docx,.md,.markdown,.txt" multiple hidden>
   </div>
 
@@ -133,10 +154,8 @@ textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px s
 
 <div class="wrap" id="session" hidden>
   <div class="bar">
-    <button class="link" id="back">← 返回</button>
-    <b>面试准备</b>
+    <b id="title"></b>
     <button class="link" id="export">导出</button>
-    <button class="link" id="restart">重新开始</button>
   </div>
   <div id="log"></div>
   <div class="status" id="sessionStatus" hidden></div>
@@ -150,6 +169,7 @@ textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px s
     <small>Enter 发送，Shift + Enter 换行</small>
   </div>
 </div>
+</main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
@@ -204,16 +224,15 @@ const CHIPS = ["我卡住了，给个提示", "结束这一轮，给我评分", 
 const $ = (id) => document.getElementById(id);
 const store = {
   get: (k) => { try { return localStorage.getItem("ip." + k) || ""; } catch { return ""; } },
-  set: (k, v) => { try { localStorage.setItem("ip." + k, v); } catch {} },
+  set: (k, v) => { try { localStorage.setItem("ip." + k, v); return true; } catch { return false; } },
 };
 const FIELDS = ["jd", "cv", "refs", "want"];
 const SKILL_FILES = ["SKILL", "prep", "behavioral", "coding", "system-design"];
 const CDN = "https://cdnjs.cloudflare.com/ajax/libs/";
 const DEAD = "这个链接已失效，请向发给你链接的人要一个新的。";
 
-let messages = [];
-let busy = false;
-let aborter = null;
+let chats = [];
+let current = null;
 let system = "";
 
 const hash = new URLSearchParams(location.hash.slice(1));
@@ -273,19 +292,9 @@ async function fileText(file) {
   return file.text();
 }
 
-function drawDoc(box) {
-  const ta = box.querySelector("textarea");
-  const has = ta.value.trim().length > 0;
-  box.querySelector(".drop").hidden = has;
-  box.querySelector(".paste").hidden = has || !ta.hidden;
-  const got = box.querySelector(".got");
-  got.hidden = !has;
-  const names = box.dataset.names;
-  got.querySelector("span").textContent = (names ? names + " · " : "") + `已读取 ${ta.value.trim().length.toLocaleString()} 字`;
-}
-
 async function takeFiles(box, files) {
   const ta = box.querySelector("textarea");
+  const note = box.querySelector(".note");
   const many = box.dataset.doc === "refs";
   try {
     status("正在读取文件…", true);
@@ -298,29 +307,22 @@ async function takeFiles(box, files) {
       if (!many) break;
     }
     ta.value = many && ta.value.trim() ? ta.value.trim() + "\n\n" + parts.join("\n\n") : parts.join("\n\n");
-    box.dataset.names = names.join("、");
     store.set(ta.id, ta.value);
+    note.textContent = `已读取 ${names.join("、")}，可以直接在上面修改`;
+    note.hidden = false;
     status("");
   } catch (e) {
     status(e.message);
   }
-  drawDoc(box);
 }
 
 function wireDoc(box) {
-  const ta = box.querySelector("textarea");
   const input = box.querySelector("input[type=file]");
-  const drop = box.querySelector(".drop");
-  drop.onclick = () => input.click();
+  box.querySelector(".up").onclick = () => input.click();
   input.onchange = () => { takeFiles(box, [...input.files]); input.value = ""; };
-  drop.ondragover = (e) => { e.preventDefault(); drop.classList.add("over"); };
-  drop.ondragleave = () => drop.classList.remove("over");
-  drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove("over"); takeFiles(box, [...e.dataTransfer.files]); };
-  box.querySelectorAll("[data-act=edit]").forEach((b) => b.onclick = () => { ta.hidden = !ta.hidden; if (!ta.hidden) ta.focus(); drawDoc(box); });
-  box.querySelector("[data-act=clear]").onclick = () => { ta.value = ""; ta.hidden = true; box.dataset.names = ""; store.set(ta.id, ""); drawDoc(box); };
-  ta.addEventListener("input", () => { box.dataset.names = ""; });
-  ta.addEventListener("blur", () => drawDoc(box));
-  drawDoc(box);
+  box.ondragover = (e) => { e.preventDefault(); box.classList.add("over"); };
+  box.ondragleave = () => box.classList.remove("over");
+  box.ondrop = (e) => { e.preventDefault(); box.classList.remove("over"); if (e.dataTransfer.files.length) takeFiles(box, [...e.dataTransfer.files]); };
 }
 
 async function systemPrompt() {
@@ -341,23 +343,63 @@ function context() {
     + block("REFERENCE MATERIALS", $("refs").value) + block("REQUEST", $("want").value);
 }
 
-function saveSession() {
-  store.set("session", messages.length ? JSON.stringify(messages.slice(1)) : "");
+function saveChats() {
+  const data = () => JSON.stringify(chats.map(({ id, title, messages }) => ({ id, title, messages })));
+  while (!store.set("chats", data()) && chats.length > 1) chats.pop();
 }
 
-function show(view) {
-  $("setup").hidden = view !== "setup";
-  $("session").hidden = view !== "session";
+function drawChats() {
+  const box = $("chats");
+  box.innerHTML = "";
+  for (const c of chats) {
+    const row = document.createElement("div");
+    row.className = "chat" + (c === current ? " on" : "") + (c.busy ? " busy" : "");
+    const name = document.createElement("span");
+    name.textContent = c.title;
+    const del = document.createElement("button");
+    del.textContent = "×";
+    del.title = "删除";
+    del.onclick = (e) => { e.stopPropagation(); removeChat(c); };
+    row.append(name, del);
+    row.onclick = () => openChat(c);
+    box.appendChild(row);
+  }
+}
+
+function syncBusy() {
+  const on = Boolean(current && current.busy);
+  $("send").hidden = on;
+  $("stop").hidden = !on;
+  $("chips").querySelectorAll("button").forEach((b) => { b.disabled = on; });
+}
+
+function show(chat) {
+  current = chat;
+  $("setup").hidden = Boolean(chat);
+  $("session").hidden = !chat;
+  document.body.classList.remove("open");
   status("");
-  $("resumeBar").hidden = messages.length < 3;
-  window.scrollTo(0, 0);
+  drawChats();
+  syncBusy();
+  if (chat) { render(); window.scrollTo(0, document.body.scrollHeight); $("answer").focus(); }
+  else window.scrollTo(0, 0);
+}
+
+function openChat(chat) { show(chat); }
+
+function removeChat(chat) {
+  if (!confirm(`删除“${chat.title}”？`)) return;
+  if (chat.busy) chat.aborter.abort();
+  chats = chats.filter((c) => c !== chat);
+  saveChats();
+  show(chat === current ? null : current);
 }
 
 function render() {
+  $("title").textContent = current.title;
   const log = $("log");
   log.innerHTML = "";
-  messages.forEach((m, i) => {
-    if (m.role === "system") return;
+  current.messages.forEach((m, i) => {
     const div = document.createElement("div");
     div.className = "msg " + m.role;
     const who = document.createElement("div");
@@ -366,7 +408,7 @@ function render() {
     const body = document.createElement("div");
     body.className = "body";
     if (m.role === "user") {
-      body.textContent = i === 1 ? ($("want").value.trim() || "（已提交资料）") : m.content;
+      body.textContent = i === 0 ? current.title : m.content;
     } else if (!m.content) {
       body.innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
     } else {
@@ -384,29 +426,26 @@ function render() {
   });
 }
 
-function setBusy(on) {
-  busy = on;
-  $("send").hidden = on;
-  $("stop").hidden = !on;
-  $("run").disabled = on;
-  $("chips").querySelectorAll("button").forEach((b) => { b.disabled = on; });
-}
-
-async function complete() {
-  setBusy(true);
-  status("");
-  const payload = messages.slice();
+async function complete(chat) {
+  const payload = [{ role: "system", content: system }, ...chat.messages];
   const reply = { role: "assistant", content: "" };
-  messages.push(reply);
-  render();
-  window.scrollTo(0, document.body.scrollHeight);
-  aborter = new AbortController();
+  chat.messages.push(reply);
+  chat.busy = true;
+  chat.aborter = new AbortController();
+  const paint = (toEnd) => {
+    if (chat !== current) return;
+    const pinned = toEnd || window.innerHeight + window.scrollY >= document.body.scrollHeight - 80;
+    render();
+    if (pinned) window.scrollTo(0, document.body.scrollHeight);
+  };
+  if (chat === current) status("");
+  drawChats(); syncBusy(); paint(true);
   let error = "";
   try {
     const res = await fetch(relay, {
-      method: "POST", signal: aborter.signal,
+      method: "POST", signal: chat.aborter.signal,
       headers: { "Content-Type": "application/json", "X-Access-Code": store.get("k") },
-      body: JSON.stringify({ messages: payload }),
+      body: JSON.stringify({ id: chat.id, messages: payload }),
     });
     if (!res.ok) throw new Error(res.status === 403 ? DEAD : res.status === 413 ? "资料太长了，请删减参考资料后重试。" : "服务暂时出错，请稍后再试。");
     const reader = res.body.getReader();
@@ -425,68 +464,58 @@ async function complete() {
         if (data === "[DONE]") continue;
         reply.content += JSON.parse(data).choices?.[0]?.delta?.content || "";
       }
-      if (Date.now() - last > 100) {
-        const pinned = window.innerHeight + window.scrollY >= document.body.scrollHeight - 80;
-        render();
-        if (pinned) window.scrollTo(0, document.body.scrollHeight);
-        last = Date.now();
-      }
+      if (Date.now() - last > 100) { paint(); last = Date.now(); }
     }
   } catch (e) {
     error = e.name === "AbortError" ? "" : e.name === "TypeError" ? "连不上服务。请检查网络；如果一直不行，" + DEAD : e.message;
   }
-  setBusy(false);
-  if (!reply.content) messages.pop();
-  if (messages.length === 2) {
-    messages = [];
-    saveSession();
-    show("setup");
-    return status(error);
+  chat.busy = false;
+  if (!reply.content) chat.messages.pop();
+  if (chat.messages.length === 1) {
+    chats = chats.filter((c) => c !== chat);
+    saveChats();
+    if (chat === current) { show(null); status(error); } else drawChats();
+    return;
   }
-  saveSession();
-  render();
-  status(error);
-  $("answer").focus();
+  saveChats();
+  drawChats();
+  if (chat === current) { syncBusy(); paint(); status(error); }
 }
 
 async function start() {
-  if (busy) return;
   if (!relay) return status(DEAD);
   if (!$("jd").value.trim() && !$("cv").value.trim()) return status("请先填岗位描述，或上传简历。");
   try {
-    messages = [{ role: "system", content: await systemPrompt() }, { role: "user", content: context() }];
+    await systemPrompt();
   } catch (e) {
     return status(e.message);
   }
-  show("session");
-  await complete();
+  const want = $("want").value.trim();
+  const chat = { id: crypto.randomUUID().replace(/-/g, "").slice(0, 16), title: want.slice(0, 40) || "面试准备", messages: [{ role: "user", content: context() }] };
+  chats.unshift(chat);
+  show(chat);
+  complete(chat);
 }
 
-function send(preset) {
+async function send(preset) {
   const text = typeof preset === "string" ? preset : $("answer").value.trim();
-  if (!text || busy) return;
-  messages.push({ role: "user", content: text });
+  if (!text || !current || current.busy) return;
+  try {
+    await systemPrompt();
+  } catch (e) {
+    return status(e.message);
+  }
+  current.messages.push({ role: "user", content: text });
   if (typeof preset !== "string") { $("answer").value = ""; $("answer").style.height = ""; }
-  complete();
+  complete(current);
 }
 
 function exportChat() {
-  const text = messages.slice(2).map((m) => `## ${m.role === "user" ? "Candidate" : "Interviewer / Coach"}\n\n${m.content}`).join("\n\n---\n\n");
+  const text = current.messages.slice(1).map((m) => `## ${m.role === "user" ? "Candidate" : "Interviewer / Coach"}\n\n${m.content}`).join("\n\n---\n\n");
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([`# Interview Prep\n\n${text}\n`], { type: "text/markdown" }));
+  a.href = URL.createObjectURL(new Blob([`# ${current.title}\n\n${text}\n`], { type: "text/markdown" }));
   a.download = `interview-prep-${new Date().toISOString().slice(0, 10)}.md`;
   a.click();
-}
-
-async function resume() {
-  try {
-    messages = [{ role: "system", content: await systemPrompt() }, ...messages.slice(1)];
-  } catch (e) {
-    return status(e.message);
-  }
-  show("session");
-  render();
-  window.scrollTo(0, document.body.scrollHeight);
 }
 
 for (const k of FIELDS) {
@@ -498,13 +527,6 @@ window.addEventListener("hashchange", () => location.reload());
 window.addEventListener("dragover", (e) => e.preventDefault());
 window.addEventListener("drop", (e) => e.preventDefault());
 
-$("sample").onclick = () => {
-  for (const k of ["jd", "cv", "want"]) { $(k).value = SAMPLE[k]; store.set(k, SAMPLE[k]); }
-  const box = document.querySelector('[data-doc="cv"]');
-  box.dataset.names = "示例简历";
-  drawDoc(box);
-  status("已填入示例，点“开始”。", true);
-};
 for (const text of CHIPS) {
   const b = document.createElement("button");
   b.type = "button";
@@ -512,17 +534,17 @@ for (const text of CHIPS) {
   b.onclick = () => send(text);
   $("chips").appendChild(b);
 }
+$("sample").onclick = () => {
+  for (const k of ["jd", "cv", "want"]) { $(k).value = SAMPLE[k]; store.set(k, SAMPLE[k]); }
+  status("已填入示例，点“开始”。", true);
+};
+$("new").onclick = () => show(null);
+$("menu").onclick = () => document.body.classList.toggle("open");
+$("shade").onclick = () => document.body.classList.remove("open");
 $("run").onclick = start;
 $("send").onclick = send;
-$("stop").onclick = () => aborter && aborter.abort();
-$("back").onclick = () => { if (busy) aborter.abort(); show("setup"); };
-$("resumeBtn").onclick = resume;
+$("stop").onclick = () => current && current.aborter && current.aborter.abort();
 $("export").onclick = exportChat;
-$("restart").onclick = () => {
-  if (!confirm("结束当前对话并重新开始？没导出的内容会丢失。")) return;
-  if (busy) aborter.abort();
-  messages = []; saveSession(); show("setup");
-};
 $("answer").addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); }
 });
@@ -532,10 +554,10 @@ $("answer").addEventListener("input", () => {
 });
 
 try {
-  const saved = JSON.parse(store.get("session") || "null");
-  if (Array.isArray(saved) && saved.length > 1) messages = [{ role: "system", content: "" }, ...saved];
+  const saved = JSON.parse(store.get("chats") || "[]");
+  if (Array.isArray(saved)) chats = saved.filter((c) => c && c.id && Array.isArray(c.messages) && c.messages.length > 1);
 } catch {}
-$("resumeBar").hidden = messages.length < 3;
+show(null);
 if (!relay) status(DEAD);
 </script>
 </body>
