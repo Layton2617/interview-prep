@@ -74,6 +74,12 @@ textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px s
 .dots span:nth-child(3) { animation-delay: .4s; }
 @keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
 .composer { position: sticky; bottom: 0; background: var(--bg); padding: 10px 0 18px; border-top: 1px solid var(--line); }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chips button { flex: 0 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 13.5px; white-space: nowrap; }
+.chips button:hover { border-color: var(--accent); color: var(--accent); }
+.chips button:disabled { opacity: .5; cursor: default; }
+.composer .btn { white-space: nowrap; flex: 0 0 auto; }
 .composer .box { display: flex; gap: 10px; align-items: flex-end; }
 .composer textarea { min-height: 52px; max-height: 40vh; resize: none; }
 .composer small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
@@ -135,6 +141,7 @@ textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px s
   <div id="log"></div>
   <div class="status" id="sessionStatus" hidden></div>
   <div class="composer">
+    <div class="chips" id="chips"></div>
     <div class="box">
       <textarea id="answer" rows="2" placeholder="输入你的回答"></textarea>
       <button class="btn primary" id="send">发送</button>
@@ -191,6 +198,8 @@ Brightpath Health, Remote — Software Engineer Intern (05/2024 - 08/2024)
 Skills: Go, Java, Python, SQL, Kafka, PostgreSQL, Redis, gRPC, AWS (ECS, SQS, RDS), Docker, Terraform`,
   want: "帮我准备这个岗位的面试",
 };
+
+const CHIPS = ["我卡住了，给个提示", "结束这一轮，给我评分", "来一轮 behavioral 模拟面试", "模拟 coding 面试", "模拟 system design", "帮我整理 STAR 故事", "把自我介绍改得更口语", "面试官会追问我简历的哪些地方？", "我该反问面试官什么？", "先暂停一下"];
 
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -380,6 +389,7 @@ function setBusy(on) {
   $("send").hidden = on;
   $("stop").hidden = !on;
   $("run").disabled = on;
+  $("chips").querySelectorAll("button").forEach((b) => { b.disabled = on; });
 }
 
 async function complete() {
@@ -452,12 +462,11 @@ async function start() {
   await complete();
 }
 
-function send() {
-  const text = $("answer").value.trim();
+function send(preset) {
+  const text = typeof preset === "string" ? preset : $("answer").value.trim();
   if (!text || busy) return;
   messages.push({ role: "user", content: text });
-  $("answer").value = "";
-  $("answer").style.height = "";
+  if (typeof preset !== "string") { $("answer").value = ""; $("answer").style.height = ""; }
   complete();
 }
 
@@ -496,6 +505,13 @@ $("sample").onclick = () => {
   drawDoc(box);
   status("已填入示例，点“开始”。", true);
 };
+for (const text of CHIPS) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = text;
+  b.onclick = () => send(text);
+  $("chips").appendChild(b);
+}
 $("run").onclick = start;
 $("send").onclick = send;
 $("stop").onclick = () => aborter && aborter.abort();
