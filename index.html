@@ -230,7 +230,8 @@ const store = {
 const FIELDS = ["jd", "cv", "refs", "want"];
 const SKILL_FILES = ["SKILL", "prep", "behavioral", "coding", "system-design"];
 const CDN = "https://cdnjs.cloudflare.com/ajax/libs/";
-const DEAD = "这个链接已失效，请向发给你链接的人要一个新的。";
+const DEAD = "服务暂时没有开启，请稍后再试，或联系给你链接的人。";
+const CONFIG_URLS = ["https://api.github.com/repos/Layton2617/interview-prep/contents/relay.json", "https://raw.githubusercontent.com/Layton2617/interview-prep/main/relay.json"];
 
 let chats = [];
 let current = null;
@@ -238,8 +239,19 @@ let system = "";
 
 const hash = new URLSearchParams(location.hash.slice(1));
 if (hash.get("r")) { store.set("r", hash.get("r")); store.set("k", hash.get("k") || ""); history.replaceState(null, "", location.pathname); }
-const relay = store.get("r") === "local" ? "http://localhost:8787"
-  : /^[a-z0-9-]+$/.test(store.get("r")) ? `https://${store.get("r")}.trycloudflare.com` : "";
+let relay = "";
+let code = "";
+
+async function findRelay() {
+  if (store.get("r") === "local") { relay = "http://localhost:8787"; code = store.get("k"); return; }
+  for (const url of CONFIG_URLS) {
+    try {
+      const res = await fetch(url, { headers: { Accept: "application/vnd.github.raw+json" }, cache: "no-store" });
+      const d = await res.json();
+      if (/^[a-z0-9-]+$/.test(d.r || "")) { relay = `https://${d.r}.trycloudflare.com`; code = d.k || ""; return; }
+    } catch {}
+  }
+}
 
 function status(text, ok) {
   const el = $("session").hidden ? $("status") : $("sessionStatus");
@@ -456,12 +468,21 @@ async function complete(chat) {
   drawChats(); syncBusy(); paint(true);
   let error = "";
   try {
-    const res = await fetch(relay, {
-      method: "POST", signal: chat.aborter.signal,
-      headers: { "Content-Type": "application/json", "X-Access-Code": store.get("k") },
-      body: JSON.stringify({ id: chat.id, messages: payload }),
-    });
-    if (!res.ok) throw new Error(res.status === 403 ? DEAD : res.status === 413 ? "资料太长了，请删减参考资料后重试。" : "服务暂时出错，请稍后再试。");
+    let res;
+    for (let attempt = 0; ; attempt++) {
+      try {
+        res = await fetch(relay, {
+          method: "POST", signal: chat.aborter.signal,
+          headers: { "Content-Type": "application/json", "X-Access-Code": code },
+          body: JSON.stringify({ id: chat.id, messages: payload }),
+        });
+        if (res.status !== 403 || attempt) break;
+      } catch (e) {
+        if (e.name !== "TypeError" || attempt) throw e;
+      }
+      await findRelay();
+    }
+    if (!res.ok) throw new Error(res.status === 403 ? DEAD : res.status === 413 ? "资料太长了，请删减参考资料后重试。" : res.status === 429 ? "今天的使用量已达上限，请明天再来。" : "服务暂时出错，请稍后再试。");
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let buf = "", last = 0;
@@ -481,7 +502,7 @@ async function complete(chat) {
       if (Date.now() - last > 100) { paint(); last = Date.now(); }
     }
   } catch (e) {
-    error = e.name === "AbortError" ? "" : e.name === "TypeError" ? "连不上服务。请检查网络；如果一直不行，" + DEAD : e.message;
+    error = e.name === "AbortError" ? "" : e.name === "TypeError" ? DEAD : e.message;
   }
   chat.busy = false;
   if (!reply.content) chat.messages.pop();
@@ -497,6 +518,7 @@ async function complete(chat) {
 }
 
 async function start() {
+  if (!relay) await findRelay();
   if (!relay) return status(DEAD);
   if (!$("jd").value.trim() && !$("cv").value.trim()) return status("请先填岗位描述，或上传简历。");
   try {
@@ -583,7 +605,7 @@ try {
   if (Array.isArray(saved)) chats = saved.filter((c) => c && c.id && Array.isArray(c.messages) && c.messages.length > 1);
 } catch {}
 show(null);
-if (!relay) status(DEAD);
+findRelay().then(() => { if (!relay) status(DEAD); });
 </script>
 </body>
 </html>
