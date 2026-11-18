@@ -99,6 +99,7 @@ header { display: none; }
 .composer textarea { min-height: 52px; max-height: 40vh; resize: none; }
 .composer small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
 #setup { padding-top: 22px; }
+#wipe { padding: 10px 8px 0; text-align: left; color: var(--muted); font-size: 13px; }
 .step h2 .up { margin-left: auto; font-weight: 400; }
 .doc.over textarea { border-color: var(--accent); background: var(--soft); }
 .note { font-size: 13px; color: var(--muted); margin-top: 6px; }
@@ -109,6 +110,7 @@ header { display: none; }
   <h1>Interview Prep</h1>
   <button class="btn primary" id="new">＋ 新对话</button>
   <div id="chats"></div>
+  <button class="link" id="wipe" hidden>清空全部对话</button>
 </aside>
 <div id="shade"></div>
 
@@ -116,7 +118,7 @@ header { display: none; }
 <header><div class="wrap"><button id="menu" aria-label="对话列表">☰</button><h1>Interview Prep</h1></div></header>
 
 <div class="wrap" id="setup">
-  <p class="intro">北美面试准备：贴上岗位，传上简历，说你想做什么。 <button class="link" id="sample">用示例试试</button> <button class="link" id="reuse" hidden>沿用上次的资料</button></p>
+  <p class="intro">北美面试准备：贴上岗位，传上简历，说你想做什么。 <button class="link" id="sample">用示例试试</button> <button class="link" id="reuse" hidden>使用已保存的资料</button></p>
 
   <div class="step doc" data-doc="jd">
     <h2><i>1</i>岗位描述<button class="link up">上传文件</button></h2>
@@ -153,6 +155,7 @@ header { display: none; }
 <div class="wrap" id="session" hidden>
   <div class="bar">
     <b id="title"></b>
+    <button class="link" id="keep"></button>
     <button class="link" id="export">导出</button>
   </div>
   <div id="log"></div>
@@ -342,7 +345,7 @@ function context() {
 }
 
 function saveChats() {
-  const data = () => JSON.stringify(chats.map(({ id, title, messages }) => ({ id, title, messages })));
+  const data = () => JSON.stringify(chats.map(({ id, title, messages, fields }) => ({ id, title, messages, fields })));
   while (!store.set("chats", data()) && chats.length > 1) chats.pop();
 }
 
@@ -379,12 +382,19 @@ function show(chat) {
   status("");
   drawChats();
   syncBusy();
-  $("reuse").hidden = !store.get("last");
+  $("reuse").hidden = !store.get("kept");
+  $("wipe").hidden = !chats.length;
+  drawKeep();
   if (chat) { render(); window.scrollTo(0, document.body.scrollHeight); $("answer").focus(); }
   else window.scrollTo(0, 0);
 }
 
 function openChat(chat) { show(chat); }
+
+function drawKeep() {
+  $("keep").hidden = !current || !current.fields;
+  $("keep").textContent = store.get("kept") ? "清除已保存的资料" : "保存资料，下次直接用";
+}
 
 function fill(values) {
   for (const k of FIELDS) { $(k).value = values[k] || ""; store.set(k, $(k).value); }
@@ -497,7 +507,7 @@ async function start() {
   const want = $("want").value.trim();
   const chat = { id: crypto.randomUUID().replace(/-/g, "").slice(0, 16), title: want.slice(0, 40) || "面试准备", messages: [{ role: "user", content: context() }] };
   chats.unshift(chat);
-  store.set("last", JSON.stringify(Object.fromEntries(FIELDS.map((k) => [k, $(k).value]))));
+  chat.fields = Object.fromEntries(["jd", "cv", "refs"].map((k) => [k, $(k).value]));
   fill({});
   show(chat);
   complete(chat);
@@ -545,7 +555,15 @@ $("sample").onclick = () => {
   status("已填入示例，点“开始”。", true);
 };
 $("new").onclick = () => { fill({}); show(null); };
-$("reuse").onclick = () => { fill({ ...JSON.parse(store.get("last") || "{}"), want: "" }); $("want").focus(); };
+$("reuse").onclick = () => { fill(JSON.parse(store.get("kept") || "{}")); $("want").focus(); };
+$("keep").onclick = () => { store.set("kept", store.get("kept") ? "" : JSON.stringify(current.fields)); drawKeep(); };
+$("wipe").onclick = () => {
+  if (!confirm("清空这个浏览器里的全部对话？")) return;
+  for (const c of chats) if (c.busy) c.aborter.abort();
+  chats = [];
+  saveChats();
+  show(null);
+};
 $("menu").onclick = () => document.body.classList.toggle("open");
 $("shade").onclick = () => document.body.classList.remove("open");
 $("run").onclick = start;
