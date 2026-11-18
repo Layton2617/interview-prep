@@ -546,7 +546,7 @@ $("sample").onclick = () => {
   fill(SAMPLE);
   status("已填入示例，点“开始”。", true);
 };
-$("new").onclick = () => show(null);
+$("new").onclick = () => { fill({}); show(null); };
 $("reuse").onclick = () => { fill({ ...JSON.parse(store.get("last") || "{}"), want: "" }); $("want").focus(); };
 $("menu").onclick = () => document.body.classList.toggle("open");
 $("shade").onclick = () => document.body.classList.remove("open");
