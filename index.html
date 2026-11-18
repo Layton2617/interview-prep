@@ -118,7 +118,7 @@ header { display: none; }
 <header><div class="wrap"><button id="menu" aria-label="对话列表">☰</button><h1>Interview Prep</h1></div></header>
 
 <div class="wrap" id="setup">
-  <p class="intro">北美面试准备：贴上岗位，传上简历，说你想做什么。 <button class="link" id="sample">用示例试试</button></p>
+  <p class="intro">北美面试准备：贴上岗位，传上简历，说你想做什么。 <button class="link" id="sample">用示例试试</button> <button class="link" id="reuse" hidden>沿用上次的资料</button></p>
 
   <div class="step doc" data-doc="jd">
     <h2><i>1</i>岗位描述<button class="link up">上传文件</button></h2>
@@ -381,11 +381,17 @@ function show(chat) {
   status("");
   drawChats();
   syncBusy();
+  $("reuse").hidden = !store.get("last");
   if (chat) { render(); window.scrollTo(0, document.body.scrollHeight); $("answer").focus(); }
   else window.scrollTo(0, 0);
 }
 
 function openChat(chat) { show(chat); }
+
+function fill(values) {
+  for (const k of FIELDS) { $(k).value = values[k] || ""; store.set(k, $(k).value); }
+  document.querySelectorAll(".note").forEach((n) => { n.hidden = true; });
+}
 
 function removeChat(chat) {
   if (!confirm(`删除“${chat.title}”？`)) return;
@@ -493,6 +499,8 @@ async function start() {
   const want = $("want").value.trim();
   const chat = { id: crypto.randomUUID().replace(/-/g, "").slice(0, 16), title: want.slice(0, 40) || "面试准备", messages: [{ role: "user", content: context() }] };
   chats.unshift(chat);
+  store.set("last", JSON.stringify(Object.fromEntries(FIELDS.map((k) => [k, $(k).value]))));
+  fill({});
   show(chat);
   complete(chat);
 }
@@ -535,10 +543,11 @@ for (const text of CHIPS) {
   $("chips").appendChild(b);
 }
 $("sample").onclick = () => {
-  for (const k of ["jd", "cv", "want"]) { $(k).value = SAMPLE[k]; store.set(k, SAMPLE[k]); }
+  fill(SAMPLE);
   status("已填入示例，点“开始”。", true);
 };
 $("new").onclick = () => show(null);
+$("reuse").onclick = () => { fill({ ...JSON.parse(store.get("last") || "{}"), want: "" }); $("want").focus(); };
 $("menu").onclick = () => document.body.classList.toggle("open");
 $("shade").onclick = () => document.body.classList.remove("open");
 $("run").onclick = start;
