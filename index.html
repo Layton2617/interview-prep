@@ -6,212 +6,312 @@
 <title>Interview Prep</title>
 <style>
 :root {
-  --bg: #f6f5f1; --panel: #ffffff; --ink: #1c1b19; --muted: #6b6860; --line: #dedbd2;
-  --accent: #1f5f4a; --accent-ink: #ffffff; --soft: #eef3f0; --warn: #9a3b1e;
+  --bg: #f5f4ef; --panel: #ffffff; --ink: #1b1a17; --muted: #6d6a61; --line: #dfdcd2; --field: #faf9f6;
+  --accent: #1d5c48; --accent-ink: #ffffff; --soft: #e8f0ec; --warn: #a13d1f; --warn-soft: #fbeee9;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #161614; --panel: #1f1f1c; --ink: #ecebe6; --muted: #9a978d; --line: #34332e;
-    --accent: #6fbf9f; --accent-ink: #10231c; --soft: #232a26; --warn: #e08a6a;
+    --bg: #151513; --panel: #1e1e1b; --ink: #edebe5; --muted: #9c998f; --line: #35342f; --field: #191917;
+    --accent: #72c4a3; --accent-ink: #0e211a; --soft: #222b26; --warn: #e79273; --warn-soft: #2d1f1a;
   }
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 -apple-system, "PingFang SC", "Segoe UI", sans-serif; }
-header { padding: 20px 24px 8px; max-width: 1280px; margin: 0 auto; }
-h1 { font-size: 20px; margin: 0; letter-spacing: 0.01em; }
-header p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
-main { display: grid; grid-template-columns: minmax(320px, 440px) 1fr; gap: 20px; padding: 12px 24px 40px; max-width: 1280px; margin: 0 auto; align-items: start; }
-@media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 12px 16px 32px; } header { padding: 16px 16px 4px; } }
-section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
-.field { margin-bottom: 14px; }
-.field:last-child { margin-bottom: 0; }
-label { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; font-size: 13px; margin-bottom: 6px; }
-label span { font-weight: 400; color: var(--muted); font-size: 12px; }
-textarea, input[type=text], input[type=password], select {
-  width: 100%; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; font: inherit; font-size: 13.5px;
-}
-textarea { resize: vertical; min-height: 90px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; }
-textarea:focus, input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
-.file { display: inline-block; margin-top: 6px; font-size: 12.5px; color: var(--accent); cursor: pointer; }
-.file input { display: none; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.modes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-.modes button { text-align: left; padding: 8px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 7px; color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
-.modes button small { display: block; color: var(--muted); font-size: 11.5px; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+.wrap { max-width: 780px; margin: 0 auto; padding: 0 20px; }
+header .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 22px; padding-bottom: 6px; }
+h1 { font-size: 19px; margin: 0; letter-spacing: 0.01em; }
+.link { background: none; border: 0; padding: 0; color: var(--accent); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.intro { color: var(--muted); margin: 6px 0 22px; font-size: 15px; }
+.resume { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--soft); border: 1px solid var(--accent); border-radius: 12px; padding: 12px 16px; margin-bottom: 18px; font-size: 14.5px; }
+.step { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 14px; }
+.step h2 { font-size: 16px; margin: 0 0 4px; display: flex; align-items: center; gap: 10px; }
+.step h2 i { font-style: normal; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 13px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.step h2 em { font-style: normal; font-weight: 400; color: var(--muted); font-size: 13px; }
+.step > p { margin: 0 0 12px 34px; color: var(--muted); font-size: 14px; }
+textarea, input[type=text], input[type=password], select { width: 100%; background: var(--field); border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; font-size: 15px; }
+textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
+textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.drop { border: 1.5px dashed var(--line); border-radius: 11px; padding: 22px 16px; text-align: center; background: var(--field); cursor: pointer; transition: border-color .15s, background .15s; }
+.drop:hover, .drop.over { border-color: var(--accent); background: var(--soft); }
+.drop b { display: block; font-size: 15px; }
+.drop small { color: var(--muted); font-size: 13px; }
+.got { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--soft); border-radius: 9px; padding: 10px 14px; font-size: 14.5px; }
+.got span::before { content: "✓ "; color: var(--accent); font-weight: 700; }
+.got div { display: flex; gap: 14px; flex: 0 0 auto; }
+.paste { margin-top: 10px; text-align: right; }
+.doc textarea { margin-top: 10px; }
+.group { font-size: 12.5px; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; margin: 14px 0 8px; }
+.group:first-of-type { margin-top: 4px; }
+.modes { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+.modes button { text-align: left; padding: 12px 14px; background: var(--field); border: 1.5px solid var(--line); border-radius: 11px; }
+.modes button b { display: block; font-size: 15px; }
+.modes button small { color: var(--muted); font-size: 13px; line-height: 1.4; display: block; margin-top: 2px; }
 .modes button[aria-pressed=true] { border-color: var(--accent); background: var(--soft); }
-.actions { display: flex; gap: 8px; margin-top: 14px; }
-.btn { flex: 1; padding: 10px 12px; border-radius: 7px; border: 1px solid var(--accent); font: inherit; font-weight: 600; cursor: pointer; background: transparent; color: var(--accent); }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.opts label, .dlg label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 5px; }
+.opts label em, .dlg label em { font-style: normal; font-weight: 400; color: var(--muted); }
+@media (max-width: 560px) { .opts { grid-template-columns: 1fr; } }
+.go { margin: 18px 0 8px; }
+.btn { border: 1.5px solid var(--accent); background: transparent; color: var(--accent); border-radius: 11px; padding: 10px 18px; font-weight: 600; font-size: 15px; }
 .btn.primary { background: var(--accent); color: var(--accent-ink); }
-.btn:disabled { opacity: 0.5; cursor: default; }
-details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
-summary { cursor: pointer; font-size: 13px; font-weight: 600; }
-details .field { margin-top: 10px; }
-.note { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
-#status { font-size: 12.5px; color: var(--warn); min-height: 18px; margin-top: 8px; }
-#out { min-height: 480px; display: flex; flex-direction: column; }
-#log { flex: 1; overflow-wrap: anywhere; }
-.empty { color: var(--muted); font-size: 14px; padding: 40px 8px; text-align: center; }
-.msg { padding: 12px 0; border-bottom: 1px solid var(--line); }
-.msg:last-child { border-bottom: 0; }
-.who { font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; display: flex; justify-content: space-between; }
-.who a { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--accent); cursor: pointer; margin-left: 10px; }
-.msg.user .body { white-space: pre-wrap; }
-.body table { border-collapse: collapse; display: block; overflow-x: auto; font-size: 13px; margin: 8px 0; }
-.body th, .body td { border: 1px solid var(--line); padding: 5px 8px; text-align: left; vertical-align: top; }
-.body pre { background: var(--bg); border: 1px solid var(--line); border-radius: 7px; padding: 10px; overflow-x: auto; font-size: 12.5px; }
-.body code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.92em; }
-.body h1, .body h2, .body h3 { font-size: 15.5px; margin: 16px 0 6px; }
-.body p { margin: 6px 0; }
-#reply { display: none; gap: 8px; margin-top: 12px; }
-#reply textarea { min-height: 64px; font-family: inherit; font-size: 14px; }
-#reply button { flex: 0 0 auto; align-self: flex-end; }
+.btn.big { width: 100%; padding: 15px; font-size: 17px; }
+.btn:disabled { opacity: .5; cursor: default; }
+.alt { text-align: center; color: var(--muted); font-size: 14px; margin: 12px 0 48px; }
+.status { background: var(--warn-soft); color: var(--warn); border-radius: 9px; padding: 10px 14px; font-size: 14.5px; margin-top: 12px; }
+.status.ok { background: var(--soft); color: var(--accent); }
+#session .bar { position: sticky; top: 0; z-index: 2; background: var(--bg); display: flex; align-items: center; gap: 14px; padding: 14px 0 12px; border-bottom: 1px solid var(--line); }
+#session .bar b { flex: 1; font-size: 16px; }
+#log { padding: 8px 0 20px; min-height: 50vh; overflow-wrap: anywhere; }
+.msg { padding: 16px 0; }
+.msg + .msg { border-top: 1px solid var(--line); }
+.who { font-size: 12px; font-weight: 700; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: baseline; }
+.who span + span { display: flex; gap: 14px; }
+.who .link { font-size: 13px; font-weight: 400; letter-spacing: 0; }
+.msg.user .body { white-space: pre-wrap; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 10px 14px; }
+.body > :first-child { margin-top: 0; }
+.body > :last-child { margin-bottom: 0; }
+.body table { border-collapse: collapse; display: block; overflow-x: auto; font-size: 14px; margin: 10px 0; }
+.body th, .body td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+.body th { background: var(--field); }
+.body pre { background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 12px; overflow-x: auto; font-size: 13.5px; line-height: 1.5; }
+.body code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.9em; }
+.body h1, .body h2, .body h3 { font-size: 17px; margin: 20px 0 8px; }
+.body p, .body ul, .body ol { margin: 8px 0; }
+.dots span { display: inline-block; width: 7px; height: 7px; margin-right: 4px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite both; }
+.dots span:nth-child(2) { animation-delay: .2s; }
+.dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+.composer { position: sticky; bottom: 0; background: var(--bg); padding: 10px 0 18px; border-top: 1px solid var(--line); }
+.composer .box { display: flex; gap: 10px; align-items: flex-end; }
+.composer textarea { min-height: 52px; max-height: 40vh; resize: none; }
+.composer small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+dialog { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--ink); padding: 22px; width: min(460px, calc(100vw - 32px)); }
+dialog::backdrop { background: rgba(0, 0, 0, .45); }
+.dlg h2 { margin: 0 0 6px; font-size: 17px; }
+.dlg p { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+.dlg .f { margin-bottom: 12px; }
+.dlg .end { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
 </style>
 </head>
 <body>
-<header>
+<header><div class="wrap">
   <h1>Interview Prep</h1>
-  <p>贴 JD、上传简历和参考资料，生成北美面试的准备材料，或者直接做一轮模拟面试。内容只在你的浏览器里处理。</p>
-</header>
-<main>
-  <section>
-    <div class="field">
-      <label for="jd">JD <span>岗位描述全文</span></label>
-      <textarea id="jd" rows="7" placeholder="把职位描述粘贴到这里"></textarea>
+  <button class="link" id="openSettings">模型连接</button>
+</div></header>
+
+<div class="wrap" id="setup">
+  <p class="intro">贴上岗位描述，上传简历，就能拿到针对这个岗位的北美面试准备材料，或者直接来一轮模拟面试。资料只在你的浏览器里处理，不会上传到本站。 <button class="link" id="sample">先用示例试试</button></p>
+
+  <div class="resume" id="resumeBar" hidden>
+    <span id="resumeText"></span>
+    <button class="btn" id="resumeBtn">继续</button>
+  </div>
+
+  <div class="step">
+    <h2><i>1</i>岗位描述</h2>
+    <p>把招聘页面上的 JD 全文粘贴进来。只练刷题或 system design 可以不填。</p>
+    <textarea id="jd" rows="6" placeholder="Paste the job description here"></textarea>
+  </div>
+
+  <div class="step doc" data-doc="cv">
+    <h2><i>2</i>简历</h2>
+    <p>所有准备内容都只基于你简历里的真实经历，不会替你编造。</p>
+    <div class="drop"><b>点击选择文件，或把简历拖到这里</b><small>支持 PDF、Word (.docx)、Markdown、TXT</small></div>
+    <div class="got" hidden><span></span><div><button class="link" data-act="edit">查看 / 修改</button><button class="link" data-act="clear">移除</button></div></div>
+    <div class="paste"><button class="link" data-act="edit">或者直接粘贴文本</button></div>
+    <textarea id="cv" rows="8" hidden placeholder="粘贴简历文本"></textarea>
+    <input type="file" accept=".pdf,.docx,.md,.markdown,.txt" hidden>
+  </div>
+
+  <div class="step doc" data-doc="refs">
+    <h2><i>3</i>参考资料 <em>可选</em></h2>
+    <p>recruiter 的邮件、公司资料、之前导出的故事库或面试记录。可以一次选多个文件。</p>
+    <div class="drop"><b>点击选择文件，或拖到这里</b><small>支持 PDF、Word (.docx)、Markdown、TXT</small></div>
+    <div class="got" hidden><span></span><div><button class="link" data-act="edit">查看 / 修改</button><button class="link" data-act="clear">移除</button></div></div>
+    <div class="paste"><button class="link" data-act="edit">或者直接粘贴文本</button></div>
+    <textarea id="refs" rows="6" hidden placeholder="粘贴参考资料"></textarea>
+    <input type="file" accept=".pdf,.docx,.md,.markdown,.txt" multiple hidden>
+  </div>
+
+  <div class="step">
+    <h2><i>4</i>想做什么</h2>
+    <p>选一项。模拟面试全程用英文，结束后给出评分和最该改的一点。</p>
+    <div id="modes"></div>
+    <div id="topicBox" hidden style="margin-top:16px">
+      <input type="text" id="topic" placeholder="想练的题目或专题，例如 Merge Intervals、sliding window">
     </div>
-    <div class="field">
-      <label for="cv">简历 <span>PDF / Markdown / 纯文本</span></label>
-      <textarea id="cv" rows="7" placeholder="粘贴简历文本，或在下面上传文件"></textarea>
-      <label class="file">上传简历<input type="file" id="cvFile" accept=".pdf,.md,.txt,.markdown"></label>
-    </div>
-    <div class="field">
-      <label for="refs">参考资料 <span>可选</span></label>
-      <textarea id="refs" rows="4" placeholder="故事库、之前的面试记录、recruiter 邮件、公司资料……"></textarea>
-      <label class="file">上传资料（可多选）<input type="file" id="refFiles" accept=".pdf,.md,.txt,.markdown" multiple></label>
-    </div>
-    <div class="row field">
-      <div>
-        <label for="round">下一轮</label>
+    <div class="opts">
+      <div><label for="round">下一轮是 <em>可选</em></label>
         <select id="round">
-          <option value="">不确定</option>
-          <option>recruiter screen</option>
-          <option>technical phone screen</option>
-          <option>onsite</option>
-        </select>
-      </div>
-      <div>
-        <label for="auth">工作身份</label>
-        <input type="text" id="auth" placeholder="如 F-1 OPT，之后需要 H-1B">
-      </div>
+          <option value="">还不确定</option>
+          <option value="recruiter screen">Recruiter 电话</option>
+          <option value="technical phone screen">技术电面</option>
+          <option value="onsite">Onsite / Virtual onsite</option>
+        </select></div>
+      <div><label for="auth">工作身份 <em>可选</em></label>
+        <input type="text" id="auth" placeholder="例如 F-1 OPT，之后需要 H-1B"></div>
     </div>
-    <div class="field">
-      <label>做什么</label>
-      <div class="modes" id="modes"></div>
-    </div>
-    <div class="field" id="topicField" style="display:none">
-      <label for="topic">题目或专题</label>
-      <input type="text" id="topic" placeholder="如 Merge Intervals，或 sliding window">
-    </div>
-    <div class="actions">
-      <button class="btn" id="copy">生成并复制 prompt</button>
-      <button class="btn primary" id="run">在这里运行</button>
-    </div>
-    <div id="status"></div>
-    <details id="settings">
-      <summary>模型设置</summary>
-      <div class="field">
-        <label for="base">Base URL <span>OpenAI 兼容端点</span></label>
-        <input type="text" id="base" placeholder="https://api.deepseek.com/v1">
-      </div>
-      <div class="field">
-        <label for="model">Model</label>
-        <input type="text" id="model" placeholder="deepseek-chat">
-      </div>
-      <div class="field">
-        <label for="key">API key</label>
-        <input type="password" id="key" autocomplete="off">
-      </div>
-      <p class="note">key 只保存在这个浏览器的 localStorage 里，请求从浏览器直接发往上面的端点。不填 key 也能用“生成并复制 prompt”，把结果贴到任意聊天模型里。</p>
-    </details>
-  </section>
-  <section id="out">
-    <div id="log"><div class="empty">填好左边，选一个模式开始。</div></div>
-    <div id="reply">
-      <textarea id="answer" placeholder="你的回答（Cmd/Ctrl + Enter 发送）"></textarea>
+  </div>
+
+  <div class="go">
+    <button class="btn primary big" id="run">开始</button>
+    <div class="status" id="status" hidden></div>
+  </div>
+  <p class="alt">想用自己的 Claude / ChatGPT？<button class="link" id="copy">复制完整 prompt</button>，贴到新对话里发送即可。</p>
+</div>
+
+<div class="wrap" id="session" hidden>
+  <div class="bar">
+    <button class="link" id="back">← 返回修改资料</button>
+    <b id="sessionTitle"></b>
+    <button class="link" id="export">导出对话</button>
+    <button class="link" id="restart">重新开始</button>
+  </div>
+  <div id="log"></div>
+  <div class="status" id="sessionStatus" hidden></div>
+  <div class="composer">
+    <div class="box">
+      <textarea id="answer" rows="2" placeholder="输入你的回答"></textarea>
       <button class="btn primary" id="send">发送</button>
+      <button class="btn" id="stop" hidden>停止</button>
     </div>
-  </section>
-</main>
+    <small>Enter 发送，Shift + Enter 换行。模拟面试中想暂停，输入 pause。</small>
+  </div>
+</div>
+
+<dialog id="settings" class="dlg">
+  <h2>模型连接</h2>
+  <p>在本页直接生成内容需要连接一个模型服务（OpenAI 兼容接口）。密钥只保存在这台电脑的浏览器里，请求从浏览器直接发给该服务。</p>
+  <div class="f"><label for="key">API key</label><input type="password" id="key" autocomplete="off"></div>
+  <div class="f"><label for="base">接口地址 <em>默认 DeepSeek</em></label><input type="text" id="base" placeholder="https://api.deepseek.com/v1"></div>
+  <div class="f"><label for="model">模型 <em>默认 deepseek-chat</em></label><input type="text" id="model" placeholder="deepseek-chat"></div>
+  <div class="end"><button class="btn" id="closeSettings">取消</button><button class="btn primary" id="saveSettings">保存</button></div>
+</dialog>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
 <script>
+const CONFIG = { endpoint: "", model: "" };
+
 const MODES = [
-  { id: "prep", name: "面试 brief", hint: "针对这个 JD 的准备材料", cmd: "prep", refs: ["prep", "behavioral"], needs: ["jd", "cv"] },
-  { id: "stories", name: "故事库", hint: "从简历挖 STAR 故事", cmd: "stories", refs: ["behavioral"], needs: ["cv"] },
-  { id: "behavioral", name: "模拟 behavioral", hint: "4-5 题，结束后打分", cmd: "mock behavioral", refs: ["behavioral"], needs: ["cv"] },
-  { id: "coding", name: "模拟 coding", hint: "一题 45 分钟", cmd: "mock coding", refs: ["coding"], needs: [] },
-  { id: "sysdesign", name: "模拟 system design", hint: "一轮 45 分钟", cmd: "mock sysdesign", refs: ["system-design"], needs: [] },
-  { id: "drill", name: "刷题", hint: "不计时，分级提示", cmd: "drill", refs: ["coding"], needs: [] },
-  { id: "debrief", name: "面后复盘", hint: "真面试完当天用", cmd: "debrief", refs: [], needs: [] },
+  { id: "prep", group: "准备", name: "面试准备 brief", hint: "会被问什么、怎么答、自我介绍、短板应对", cmd: "prep", refs: ["prep", "behavioral"], needs: ["jd", "cv"] },
+  { id: "stories", group: "准备", name: "整理我的故事", hint: "从简历里挖出 STAR 故事，一问一答", cmd: "stories", refs: ["behavioral"], needs: ["cv"] },
+  { id: "behavioral", group: "模拟面试", name: "Behavioral", hint: "4-5 道行为面试题", cmd: "mock behavioral", refs: ["behavioral"], needs: ["cv"] },
+  { id: "coding", group: "模拟面试", name: "Coding", hint: "一道算法题，45 分钟节奏", cmd: "mock coding", refs: ["coding"], needs: [] },
+  { id: "sysdesign", group: "模拟面试", name: "System Design", hint: "一道开放设计题", cmd: "mock sysdesign", refs: ["system-design"], needs: [] },
+  { id: "drill", group: "练习与复盘", name: "刷题辅导", hint: "不计时，卡住时逐级给提示", cmd: "drill", refs: ["coding"], needs: [] },
+  { id: "debrief", group: "练习与复盘", name: "面后复盘", hint: "刚面完，趁记得把问题和回答记下来", cmd: "debrief", refs: [], needs: [] },
 ];
 
 const ADAPTER = `You are running as a web chat, not inside the jobpipe repository. There is no file system and no shell. Read the skill below with these substitutions:
-- "the pack" and jd.txt are the JOB DESCRIPTION section of the first user message. There is no slug; never ask for one.
+- "the pack" and jd.txt are the JOB DESCRIPTION section of the first user message. There is no slug; never ask for one. If there is no JOB DESCRIPTION, work without a pack.
 - me/cv.md is the RESUME section. It is the only source of facts about the candidate.
 - me/stories.md, me/interview-log.md, 00-jd-breakdown.md, report.md and any earlier 02-interview-prep.md exist only if they appear under REFERENCE MATERIALS. Otherwise treat them as not existing yet.
 - config/profile.yml is the CANDIDATE NOTES section.
-- Where the skill says to write or append to a file, print that content in the chat under a heading with the file name, so the candidate can save it and paste it back next time under reference materials.
-- Skip every ./jobpipe.sh command.
+- Where the skill says to write or append to a file, print that content in the chat under a heading with the file name, so the candidate can export it and add it back next time under reference materials.
+- Skip every ./jobpipe.sh command, and never mention files, slugs, packs or commands to the candidate: they only see this chat.
 Everything else in the skill applies unchanged.`;
 
+const SAMPLE = {
+  jd: `Northwind Payments — Software Engineer, Backend (Payouts)
+Location: New York, NY (hybrid)   Compensation: $135,000 - $165,000 base plus equity
+
+The Payouts team moves money to more than 200,000 merchants every day. Correctness matters more than anything else here: a payout must happen exactly once, for the right amount, on time.
+
+What you'll do
+- Design, build and operate backend services in Go and Java that schedule and execute merchant payouts
+- Make our payout pipeline idempotent and resilient to bank-rail failures and retries
+- Participate in the on-call rotation and drive postmortems to real fixes
+
+What we're looking for
+- 1-3 years of experience building backend services in production
+- Strong skills in Go or Java
+- Experience with relational databases, including transactions and schema design
+- Experience with message queues or event streaming (Kafka, SQS or similar)
+- An understanding of distributed systems fundamentals: idempotency, retries, consistency
+
+Interview process: recruiter call, a 60-minute technical phone screen (coding), then a virtual onsite: coding, system design, behavioral. We are able to sponsor work visas for this role.`,
+  cv: `Alex Chen — Backend software engineer, 1.5 years of experience. M.S. Computer Science.
+
+Lumen Logistics, Jersey City, NJ — Software Engineer (07/2025 - Present)
+- Built a shipment-tracking event service in Go on Kafka and PostgreSQL that processes 3M events per day with p99 latency under 120 ms.
+- Cut duplicate webhook deliveries from 1.8% to 0.02% by adding idempotency keys and a Redis-backed dedup window.
+- Migrated 14 cron jobs to a queue-based scheduler, reducing missed runs from about 5 per week to zero over 3 months.
+- On-call in a 5-person rotation; wrote 6 runbooks and led the postmortem for a 40-minute outage caused by a connection pool leak.
+
+Brightpath Health, Remote — Software Engineer Intern (05/2024 - 08/2024)
+- Added a token-bucket rate limiter to the public appointments API in Java Spring Boot, cutting 429-related support tickets by 30%.
+- Wrote integration tests that raised coverage of the scheduling module from 54% to 81%.
+
+Skills: Go, Java, Python, SQL, Kafka, PostgreSQL, Redis, gRPC, AWS (ECS, SQS, RDS), Docker, Terraform`,
+};
+
 const $ = (id) => document.getElementById(id);
-const SAVED = ["jd", "cv", "refs", "round", "auth", "base", "model", "key", "topic"];
 const store = {
   get: (k) => { try { return localStorage.getItem("ip." + k) || ""; } catch { return ""; } },
   set: (k, v) => { try { localStorage.setItem("ip." + k, v); } catch {} },
 };
+const FIELDS = ["jd", "cv", "refs", "round", "auth", "topic"];
+const CDN = "https://cdnjs.cloudflare.com/ajax/libs/";
 
 let mode = store.get("mode") || "prep";
 let messages = [];
+let sessionMode = "";
 let busy = false;
+let aborter = null;
 const skill = {};
+const modeOf = (id) => MODES.find((m) => m.id === id);
 
-function setStatus(text) { $("status").textContent = text || ""; }
+function status(text, ok) {
+  const el = $("session").hidden ? $("status") : $("sessionStatus");
+  $("status").hidden = $("sessionStatus").hidden = true;
+  if (!text) return;
+  el.textContent = text;
+  el.className = "status" + (ok ? " ok" : "");
+  el.hidden = false;
+}
 
 function drawModes() {
-  $("modes").innerHTML = "";
+  const box = $("modes");
+  box.innerHTML = "";
+  let grid = null, group = "";
   for (const m of MODES) {
+    if (m.group !== group) {
+      group = m.group;
+      const h = document.createElement("div");
+      h.className = "group";
+      h.textContent = group;
+      grid = document.createElement("div");
+      grid.className = "modes";
+      box.append(h, grid);
+    }
     const b = document.createElement("button");
     b.type = "button";
     b.setAttribute("aria-pressed", String(m.id === mode));
-    b.innerHTML = `${m.name}<small>${m.hint}</small>`;
-    b.onclick = () => { mode = m.id; store.set("mode", mode); drawModes(); };
-    $("modes").appendChild(b);
+    b.innerHTML = `<b>${m.name}</b><small>${m.hint}</small>`;
+    b.onclick = () => { mode = m.id; store.set("mode", mode); drawModes(); status(""); };
+    grid.appendChild(b);
   }
-  $("topicField").style.display = mode === "drill" ? "" : "none";
-}
-
-async function loadSkill(name) {
-  if (!skill[name]) {
-    const r = await fetch(`skill/${name}.md`);
-    if (!r.ok) throw new Error(`读取 skill/${name}.md 失败`);
-    skill[name] = await r.text();
-  }
-  return skill[name];
+  $("topicBox").hidden = mode !== "drill";
+  $("run").textContent = "开始：" + modeOf(mode).name;
 }
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     const s = document.createElement("script");
-    s.src = src; s.onload = resolve; s.onerror = () => reject(new Error("加载 PDF 解析库失败"));
+    s.src = src; s.onload = resolve; s.onerror = () => reject(new Error("文件解析组件加载失败，请检查网络后重试"));
     document.head.appendChild(s);
   });
 }
 
 async function pdfText(file) {
-  const cdn = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
   if (!window.pdfjsLib) {
-    await loadScript(cdn + "pdf.min.js");
-    pdfjsLib.GlobalWorkerOptions.workerSrc = cdn + "pdf.worker.min.js";
+    await loadScript(CDN + "pdf.js/3.11.174/pdf.min.js");
+    pdfjsLib.GlobalWorkerOptions.workerSrc = CDN + "pdf.js/3.11.174/pdf.worker.min.js";
   }
   const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
   const pages = [];
@@ -230,27 +330,82 @@ async function pdfText(file) {
   return pages.join("\n\n");
 }
 
-async function fileText(file) {
-  return file.name.toLowerCase().endsWith(".pdf") ? pdfText(file) : file.text();
+async function docxText(file) {
+  if (!window.mammoth) await loadScript(CDN + "mammoth/1.6.0/mammoth.browser.min.js");
+  return (await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() })).value;
 }
 
-async function onFiles(input, target, append) {
+async function fileText(file) {
+  const name = file.name.toLowerCase();
+  if (name.endsWith(".pdf")) return pdfText(file);
+  if (name.endsWith(".docx")) return docxText(file);
+  if (name.endsWith(".doc")) throw new Error(`${file.name} 是旧版 Word 格式，请另存为 .docx 或 PDF 后再上传`);
+  return file.text();
+}
+
+function drawDoc(box) {
+  const ta = box.querySelector("textarea");
+  const has = ta.value.trim().length > 0;
+  box.querySelector(".drop").hidden = has;
+  box.querySelector(".paste").hidden = has || !ta.hidden;
+  const got = box.querySelector(".got");
+  got.hidden = !has;
+  const names = box.dataset.names;
+  got.querySelector("span").textContent = (names ? names + " · " : "") + `已读取 ${ta.value.trim().length.toLocaleString()} 字`;
+}
+
+async function takeFiles(box, files) {
+  const ta = box.querySelector("textarea");
+  const many = box.dataset.doc === "refs";
   try {
-    setStatus("读取文件中…");
-    const parts = [];
-    for (const f of input.files) {
+    status("正在读取文件…", true);
+    const parts = [], names = [];
+    for (const f of files) {
       const text = (await fileText(f)).trim();
-      if (!text) throw new Error(`${f.name} 里没读到文字（扫描件 PDF 读不了，请粘贴文本）`);
-      parts.push(append ? `--- ${f.name} ---\n${text}` : text);
+      if (!text) throw new Error(`${f.name} 里没有读到文字。扫描件或图片版 PDF 读不了，请改为粘贴文本。`);
+      parts.push(many ? `--- ${f.name} ---\n${text}` : text);
+      names.push(f.name);
+      if (!many) break;
     }
-    const el = $(target);
-    el.value = append && el.value.trim() ? el.value.trim() + "\n\n" + parts.join("\n\n") : parts.join("\n\n");
-    store.set(target, el.value);
-    setStatus("");
+    ta.value = many && ta.value.trim() ? ta.value.trim() + "\n\n" + parts.join("\n\n") : parts.join("\n\n");
+    box.dataset.names = names.join("、");
+    store.set(ta.id, ta.value);
+    status("");
   } catch (e) {
-    setStatus(e.message);
+    status(e.message);
   }
-  input.value = "";
+  drawDoc(box);
+}
+
+function wireDoc(box) {
+  const ta = box.querySelector("textarea");
+  const input = box.querySelector("input[type=file]");
+  const drop = box.querySelector(".drop");
+  drop.onclick = () => input.click();
+  input.onchange = () => { takeFiles(box, [...input.files]); input.value = ""; };
+  drop.ondragover = (e) => { e.preventDefault(); drop.classList.add("over"); };
+  drop.ondragleave = () => drop.classList.remove("over");
+  drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove("over"); takeFiles(box, [...e.dataTransfer.files]); };
+  box.querySelectorAll("[data-act=edit]").forEach((b) => b.onclick = () => { ta.hidden = !ta.hidden; if (!ta.hidden) ta.focus(); drawDoc(box); });
+  box.querySelector("[data-act=clear]").onclick = () => { ta.value = ""; ta.hidden = true; box.dataset.names = ""; store.set(ta.id, ""); drawDoc(box); };
+  ta.addEventListener("input", () => { box.dataset.names = ""; });
+  ta.addEventListener("blur", () => drawDoc(box));
+  drawDoc(box);
+}
+
+async function loadSkill(name) {
+  if (!skill[name]) {
+    const r = await fetch(`skill/${name}.md`);
+    if (!r.ok) throw new Error("页面资源加载失败，请刷新后重试");
+    skill[name] = await r.text();
+  }
+  return skill[name];
+}
+
+async function systemPrompt() {
+  const parts = [ADAPTER, "# SKILL.md\n\n" + await loadSkill("SKILL")];
+  for (const r of modeOf(mode).refs) parts.push(`# references/${r}.md\n\n` + await loadSkill(r));
+  return parts.join("\n\n---\n\n");
 }
 
 function context() {
@@ -259,34 +414,39 @@ function context() {
     $("round").value && `Next round: ${$("round").value}`,
     $("auth").value.trim() && `Work authorization (visa_status): ${$("auth").value.trim()}`,
   ].filter(Boolean).join("\n");
-  const m = MODES.find((x) => x.id === mode);
   const topic = mode === "drill" && $("topic").value.trim() ? " " + $("topic").value.trim() : "";
   return block("JOB DESCRIPTION", $("jd").value) + block("RESUME", $("cv").value)
     + block("REFERENCE MATERIALS", $("refs").value) + block("CANDIDATE NOTES", notes)
-    + `Command: ${m.cmd}${topic}`;
-}
-
-async function systemPrompt() {
-  const m = MODES.find((x) => x.id === mode);
-  const parts = [ADAPTER, "# SKILL.md\n\n" + await loadSkill("SKILL")];
-  for (const r of m.refs) parts.push(`# references/${r}.md\n\n` + await loadSkill(r));
-  return parts.join("\n\n---\n\n");
+    + `Command: ${modeOf(mode).cmd}${topic}`;
 }
 
 function missing() {
-  const m = MODES.find((x) => x.id === mode);
-  const names = { jd: "JD", cv: "简历" };
-  const gaps = m.needs.filter((k) => !$(k).value.trim()).map((k) => names[k]);
-  return gaps.length ? `这个模式需要先填：${gaps.join("、")}` : "";
+  const names = { jd: "岗位描述（第 1 步）", cv: "简历（第 2 步）" };
+  const gaps = modeOf(mode).needs.filter((k) => !$(k).value.trim()).map((k) => names[k]);
+  return gaps.length ? `“${modeOf(mode).name}”需要先填：${gaps.join("、")}` : "";
+}
+
+function saveSession() {
+  store.set("session", messages.length ? JSON.stringify({ mode: sessionMode, messages }) : "");
+}
+
+function show(view) {
+  $("setup").hidden = view !== "setup";
+  $("session").hidden = view !== "session";
+  status("");
+  if (view === "setup") drawResume();
+  window.scrollTo(0, 0);
+}
+
+function drawResume() {
+  const has = messages.length > 2;
+  $("resumeBar").hidden = !has;
+  if (has) $("resumeText").textContent = `上次的“${modeOf(sessionMode).name}”还没结束。`;
 }
 
 function render() {
+  $("sessionTitle").textContent = modeOf(sessionMode).name;
   const log = $("log");
-  if (!messages.some((m) => m.role !== "system")) {
-    log.innerHTML = '<div class="empty">填好左边，选一个模式开始。</div>';
-    $("reply").style.display = "none";
-    return;
-  }
   log.innerHTML = "";
   messages.forEach((m, i) => {
     if (m.role === "system") return;
@@ -295,47 +455,57 @@ function render() {
     const who = document.createElement("div");
     who.className = "who";
     who.innerHTML = `<span>${m.role === "user" ? "你" : "面试官 / 教练"}</span>`;
-    if (m.role === "assistant" && m.content) {
-      const tools = document.createElement("span");
-      const copy = document.createElement("a");
-      copy.textContent = "复制";
-      copy.onclick = () => navigator.clipboard.writeText(m.content).then(() => { copy.textContent = "已复制"; });
-      const save = document.createElement("a");
-      save.textContent = "下载 .md";
-      save.onclick = () => {
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(new Blob([m.content], { type: "text/markdown" }));
-        a.download = `interview-${mode}.md`;
-        a.click();
-      };
-      tools.append(copy, save);
-      who.appendChild(tools);
-    }
     const body = document.createElement("div");
     body.className = "body";
-    if (m.role === "assistant") body.innerHTML = DOMPurify.sanitize(marked.parse(m.content || "…"));
-    else body.textContent = i === 1 ? `${MODES.find((x) => x.id === mode).name}（已附上 JD、简历和资料）` : m.content;
+    if (m.role === "user") {
+      body.textContent = i === 1 ? "（已提交岗位描述、简历和资料）" : m.content;
+    } else if (!m.content) {
+      body.innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+    } else {
+      body.innerHTML = DOMPurify.sanitize(marked.parse(m.content));
+      const tools = document.createElement("span");
+      const copy = document.createElement("button");
+      copy.className = "link";
+      copy.textContent = "复制";
+      copy.onclick = () => navigator.clipboard.writeText(m.content).then(() => { copy.textContent = "已复制"; });
+      tools.appendChild(copy);
+      who.appendChild(tools);
+    }
     div.append(who, body);
     log.appendChild(div);
   });
-  $("reply").style.display = "flex";
+}
+
+function setBusy(on) {
+  busy = on;
+  $("send").hidden = on;
+  $("stop").hidden = !on;
+  $("run").disabled = on;
 }
 
 async function complete() {
-  busy = true;
-  $("run").disabled = $("send").disabled = true;
-  const reply = { role: "assistant", content: "" };
+  setBusy(true);
+  status("");
   const payload = messages.slice();
+  const reply = { role: "assistant", content: "" };
   messages.push(reply);
   render();
+  window.scrollTo(0, document.body.scrollHeight);
+  aborter = new AbortController();
   try {
-    const base = ($("base").value.trim() || "https://api.deepseek.com/v1").replace(/\/+$/, "");
-    const res = await fetch(base + "/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: "Bearer " + $("key").value.trim() },
-      body: JSON.stringify({ model: $("model").value.trim() || "deepseek-chat", messages: payload, stream: true }),
+    const base = (store.get("base") || "https://api.deepseek.com/v1").replace(/\/+$/, "");
+    const headers = { "Content-Type": "application/json" };
+    if (!CONFIG.endpoint) headers.Authorization = "Bearer " + store.get("key");
+    const res = await fetch(CONFIG.endpoint || base + "/chat/completions", {
+      method: "POST", headers, signal: aborter.signal,
+      body: JSON.stringify({ model: CONFIG.model || store.get("model") || "deepseek-chat", messages: payload, stream: true }),
     });
-    if (!res.ok) throw new Error(`模型接口返回 ${res.status}：${(await res.text()).slice(0, 300)}`);
+    if (!res.ok) {
+      const detail = (await res.text()).slice(0, 200);
+      throw new Error(res.status === 401 ? "API key 无效，请在右上角“模型连接”里检查。"
+        : res.status === 402 || res.status === 429 ? "模型服务余额不足或请求过于频繁，请稍后再试。"
+        : `模型服务返回错误（${res.status}）：${detail}`);
+    }
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let buf = "", last = 0;
@@ -346,48 +516,65 @@ async function complete() {
       const lines = buf.split("\n");
       buf = lines.pop();
       for (const line of lines) {
-        const data = line.trim().replace(/^data:\s*/, "");
-        if (!line.trim().startsWith("data:") || data === "[DONE]") continue;
+        const t = line.trim();
+        if (!t.startsWith("data:")) continue;
+        const data = t.slice(5).trim();
+        if (data === "[DONE]") continue;
         reply.content += JSON.parse(data).choices?.[0]?.delta?.content || "";
       }
-      if (Date.now() - last > 120) { render(); last = Date.now(); }
+      if (Date.now() - last > 100) {
+        const pinned = window.innerHeight + window.scrollY >= document.body.scrollHeight - 80;
+        render();
+        if (pinned) window.scrollTo(0, document.body.scrollHeight);
+        last = Date.now();
+      }
     }
-    setStatus("");
   } catch (e) {
+    const text = e.name === "AbortError" ? "" : e.name === "TypeError" ? "连不上模型服务。请检查网络，或在“模型连接”里确认接口地址。" : e.message;
     if (!reply.content) messages.pop();
-    setStatus(e.message === "Failed to fetch" ? "请求没发出去：检查 Base URL，或者这个端点不允许浏览器直连（CORS）。" : e.message);
+    if (messages.length === 2) {
+      messages = [];
+      setBusy(false);
+      saveSession();
+      show("setup");
+      return status(text);
+    }
+    status(text);
   }
-  busy = false;
-  $("run").disabled = $("send").disabled = false;
+  setBusy(false);
+  saveSession();
   render();
-  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  $("answer").focus();
 }
 
 async function start() {
   if (busy) return;
   const gap = missing();
-  if (gap) return setStatus(gap);
-  if (!$("key").value.trim()) {
-    $("settings").open = true;
-    return setStatus("在这里运行需要先在“模型设置”里填 API key；没有 key 可以用“生成并复制 prompt”。");
+  if (gap) return status(gap);
+  if (!CONFIG.endpoint && !store.get("key")) {
+    openSettings();
+    return status("在本页直接运行需要先连接模型。没有的话，可以用下面的“复制完整 prompt”。");
   }
   try {
-    messages = [{ role: "system", content: await systemPrompt() }, { role: "user", content: context() }];
+    const sys = await systemPrompt();
+    sessionMode = mode;
+    messages = [{ role: "system", content: sys }, { role: "user", content: context() }];
   } catch (e) {
-    return setStatus(e.message);
+    return status(e.message);
   }
+  show("session");
   await complete();
 }
 
 async function copyPrompt() {
   const gap = missing();
-  if (gap) return setStatus(gap);
+  if (gap) return status(gap);
   try {
     const text = await systemPrompt() + "\n\n---\n\n" + context();
     await navigator.clipboard.writeText(text);
-    setStatus(`已复制（${text.length.toLocaleString()} 字符）。贴到 Claude / ChatGPT 的新对话里发送即可。`);
+    status("已复制。打开 Claude 或 ChatGPT，新建对话，粘贴并发送。", true);
   } catch (e) {
-    setStatus(e.message);
+    status("复制失败：" + e.message);
   }
 }
 
@@ -396,20 +583,73 @@ function send() {
   if (!text || busy) return;
   messages.push({ role: "user", content: text });
   $("answer").value = "";
+  $("answer").style.height = "";
   complete();
 }
 
-for (const k of SAVED) {
+function exportChat() {
+  const text = messages.slice(2).map((m) => `## ${m.role === "user" ? "Candidate" : "Interviewer / Coach"}\n\n${m.content}`).join("\n\n---\n\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([`# ${modeOf(sessionMode).name}\n\n${text}\n`], { type: "text/markdown" }));
+  a.download = `interview-${sessionMode}-${new Date().toISOString().slice(0, 10)}.md`;
+  a.click();
+}
+
+function openSettings() {
+  for (const k of ["key", "base", "model"]) $(k).value = store.get(k);
+  $("settings").showModal();
+}
+
+for (const k of FIELDS) {
   $(k).value = store.get(k);
   $(k).addEventListener("input", () => store.set(k, $(k).value));
 }
-$("cvFile").onchange = (e) => onFiles(e.target, "cv", false);
-$("refFiles").onchange = (e) => onFiles(e.target, "refs", true);
+document.querySelectorAll(".doc").forEach(wireDoc);
+window.addEventListener("dragover", (e) => e.preventDefault());
+window.addEventListener("drop", (e) => e.preventDefault());
+
+$("openSettings").hidden = Boolean(CONFIG.endpoint);
+$("openSettings").onclick = openSettings;
+$("closeSettings").onclick = () => $("settings").close();
+$("saveSettings").onclick = () => {
+  for (const k of ["key", "base", "model"]) store.set(k, $(k).value.trim());
+  $("settings").close();
+  status("");
+};
+$("sample").onclick = () => {
+  $("jd").value = SAMPLE.jd; $("cv").value = SAMPLE.cv;
+  store.set("jd", SAMPLE.jd); store.set("cv", SAMPLE.cv);
+  const box = document.querySelector('[data-doc="cv"]');
+  box.dataset.names = "示例简历";
+  drawDoc(box);
+  status("已填入示例岗位和示例简历，选好第 4 步后点“开始”。", true);
+};
 $("run").onclick = start;
 $("copy").onclick = copyPrompt;
 $("send").onclick = send;
-$("answer").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) send(); });
+$("stop").onclick = () => aborter && aborter.abort();
+$("back").onclick = () => { if (busy) aborter.abort(); show("setup"); };
+$("resumeBtn").onclick = () => { show("session"); render(); window.scrollTo(0, document.body.scrollHeight); };
+$("export").onclick = exportChat;
+$("restart").onclick = () => {
+  if (!confirm("结束当前对话并重新开始？没导出的内容会丢失。")) return;
+  if (busy) aborter.abort();
+  messages = []; saveSession(); show("setup");
+};
+$("answer").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); }
+});
+$("answer").addEventListener("input", () => {
+  $("answer").style.height = "auto";
+  $("answer").style.height = Math.min($("answer").scrollHeight + 2, window.innerHeight * 0.4) + "px";
+});
+
+try {
+  const saved = JSON.parse(store.get("session") || "null");
+  if (saved && modeOf(saved.mode)) { messages = saved.messages; sessionMode = saved.mode; }
+} catch {}
 drawModes();
+drawResume();
 </script>
 </body>
 </html>
